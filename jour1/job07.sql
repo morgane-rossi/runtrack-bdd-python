@@ -1,0 +1,2 @@
+mysqldump etudiant > laplateforme.sql
+
