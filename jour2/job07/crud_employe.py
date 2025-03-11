@@ -35,6 +35,29 @@ def creer_employe(nom, prenom, salaire, id_service):
     except mysql.connector.Error as error:
         print(f"Something went wrong: {error}")
 
+def supprimer_employe(nom, prenom):
+
+    try :
+        connection = mysql.connector.connect(
+            host = "localhost",
+            user = username,
+            password = userpass,
+            database = "job07"
+        )
+
+        usercurs = connection.cursor()
+     
+        usercurs.execute(
+            "DELETE FROM employe WHERE nom = %s AND prenom = %s", (nom, prenom)
+        )
+        connection.commit()
+        usercurs.close()
+        connection.close()
+
+    except mysql.connector.Error as error:
+        print(f"Something went wrong: {error}")
+
+
 
 def afficher_employes():
     try :
@@ -89,4 +112,4 @@ def find_if_rich():
         print(f"Something went wrong: {error}")
 
 
-afficher_employes()
+supprimer_employe("Durand", "Cunegonde")
