@@ -58,7 +58,6 @@ def supprimer_employe(nom, prenom):
         print(f"Something went wrong: {error}")
 
 
-
 def afficher_employes():
     try :
 
@@ -88,6 +87,29 @@ def afficher_employes():
     except mysql.connector.Error as error:
         print(f"Something went wrong: {error}")
 
+def afficher_un_employe(id_employe):
+    try :
+
+        connection = mysql.connector.connect(
+            host = "localhost",
+            user = username,
+            password = userpass,
+            database = "job07"
+        )
+        id_employe = [id_employe]
+        usercurs = connection.cursor()
+
+        usercurs.execute(
+            "SELECT * FROM employe WHERE id_employe = %s;", id_employe
+        )
+        row = usercurs.fetchone()
+        print(row)
+        usercurs.close()
+        connection.close()
+
+    except mysql.connector.Error as error:
+        print(f"Something went wrong: {error}")
+
 
 def find_if_rich():
     try :
@@ -111,5 +133,3 @@ def find_if_rich():
     except mysql.connector.Error as error:
         print(f"Something went wrong: {error}")
 
-
-supprimer_employe("Durand", "Cunegonde")
