@@ -1,5 +1,4 @@
 import data
-import employe
 
 import mysql.connector
 import data
@@ -14,122 +13,98 @@ class Employe:
         self.salaire = salaire
         self.id_service = id_service
 
-def creer_employe(nom, prenom, salaire, id_service):
+    def creer_employe(self):
 
-    try :
-        new_employe = (nom, prenom, salaire, id_service)
-        connection = mysql.connector.connect(
-            host = "localhost",
-            user = username,
-            password = userpass,
-            database = "job07"
-        )
+        try :
+            new_employe = (self.nom, self.prenom, self.salaire, self.id_service)
+            connection = mysql.connector.connect(
+                host = "localhost",
+                user = username,
+                password = userpass,
+                database = "job07"
+            )
 
-        usercurs = connection.cursor()
+            usercurs = connection.cursor()
+            
+            usercurs.execute("INSERT INTO employe (nom, prenom, salaire, id_service) VALUES (%s, %s, %s, %s)", new_employe)
+            connection.commit()
+            usercurs.close()
+            connection.close()
+
+        except mysql.connector.Error as error:
+            print(f"Something went wrong: {error}")
+
+    def supprimer_employe(self):
+
+        try :
+            connection = mysql.connector.connect(
+                host = "localhost",
+                user = username,
+                password = userpass,
+                database = "job07"
+            )
+
+            usercurs = connection.cursor()
         
-        usercurs.execute("INSERT INTO employe (nom, prenom, salaire, id_service) VALUES (%s, %s, %s, %s)", new_employe)
-        connection.commit()
-        usercurs.close()
-        connection.close()
+            usercurs.execute(
+                "DELETE FROM employe WHERE id_employe = %s", (self.id_employe)
+            )
+            connection.commit()
+            usercurs.close()
+            connection.close()
 
-    except mysql.connector.Error as error:
-        print(f"Something went wrong: {error}")
-
-def supprimer_employe(nom, prenom):
-
-    try :
-        connection = mysql.connector.connect(
-            host = "localhost",
-            user = username,
-            password = userpass,
-            database = "job07"
-        )
-
-        usercurs = connection.cursor()
-     
-        usercurs.execute(
-            "DELETE FROM employe WHERE nom = %s AND prenom = %s", (nom, prenom)
-        )
-        connection.commit()
-        usercurs.close()
-        connection.close()
-
-    except mysql.connector.Error as error:
-        print(f"Something went wrong: {error}")
+        except mysql.connector.Error as error:
+            print(f"Something went wrong: {error}")
 
 
-def afficher_employes():
-    try :
+    def afficher_employes(self):
+        try :
 
-        connection = mysql.connector.connect(
-            host = "localhost",
-            user = username,
-            password = userpass,
-            database = "job07"
-        )
+            connection = mysql.connector.connect(
+                host = "localhost",
+                user = username,
+                password = userpass,
+                database = "job07"
+            )
 
-        usercurs = connection.cursor()
-        
-        usercurs.execute(
-            """
-            SELECT employe.nom, employe.prenom, service.nom
-            FROM employe
-            JOIN service
-            ON employe.id_service = service.id_service
-            """
-        )
-        rows = usercurs.fetchall()
-        for r in rows :
-            print(r)
-        usercurs.close()
-        connection.close()
+            usercurs = connection.cursor()
+            
+            usercurs.execute(
+                """
+                SELECT employe.nom, employe.prenom, service.nom
+                FROM employe
+                JOIN service
+                ON employe.id_service = service.id_service
+                """
+            )
+            rows = usercurs.fetchall()
+            for r in rows :
+                print(r)
+            usercurs.close()
+            connection.close()
 
-    except mysql.connector.Error as error:
-        print(f"Something went wrong: {error}")
+        except mysql.connector.Error as error:
+            print(f"Something went wrong: {error}")
 
-def afficher_un_employe(id_employe):
-    try :
+    def find_if_rich(self):
+        try :
 
-        connection = mysql.connector.connect(
-            host = "localhost",
-            user = username,
-            password = userpass,
-            database = "job07"
-        )
-        id_employe = [id_employe]
-        usercurs = connection.cursor()
+            connection = mysql.connector.connect(
+                host = "localhost",
+                user = username,
+                password = userpass,
+                database = "job07"
+            )
 
-        usercurs.execute(
-            "SELECT * FROM employe WHERE id_employe = %s;", id_employe
-        )
-        row = usercurs.fetchone()
-        print(row)
-        usercurs.close()
-        connection.close()
+            usercurs = connection.cursor()
+            
+            usercurs.execute("SELECT * FROM employe WHERE salaire > 3000;")
+            rows = usercurs.fetchall()
+            for r in rows :
+                print(r)
+            usercurs.close()
+            connection.close()
 
-    except mysql.connector.Error as error:
-        print(f"Something went wrong: {error}")
-
-
-def find_if_rich():
-    try :
-
-        connection = mysql.connector.connect(
-            host = "localhost",
-            user = username,
-            password = userpass,
-            database = "job07"
-        )
-
-        usercurs = connection.cursor()
-        
-        usercurs.execute("SELECT * FROM employe WHERE salaire > 3000;")
-        rows = usercurs.fetchall()
-        for r in rows :
-            print(r)
-        usercurs.close()
-        connection.close()
-
-    except mysql.connector.Error as error:
-        print(f"Something went wrong: {error}")
+        except mysql.connector.Error as error:
+            print(f"Something went wrong: {error}")
 
