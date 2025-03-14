@@ -1,8 +1,10 @@
 import mysql.connector
-import data
-username = data.personnel[0]
-userpass = data.personnel[1]
+from os import getenv
+from dotenv import load_dotenv
 
+load_dotenv()
+username = getenv("USERNAME")
+userpass = getenv("PASS")
 
 try :
 

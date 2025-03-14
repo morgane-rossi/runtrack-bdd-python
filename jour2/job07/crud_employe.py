@@ -1,9 +1,10 @@
-import data
-
 import mysql.connector
-import data
-username = data.personnel[0]
-userpass = data.personnel[1]
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+username = getenv("USERNAME")
+userpass = getenv("PASS")
 
 class Employe:
     def __init__(self, id_employe, nom, prenom, salaire, id_service):
